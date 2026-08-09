@@ -102,6 +102,19 @@
             letter-spacing: 1px;
         }
 
+        #totalDaysDisplay {
+            cursor: pointer;
+            padding: 4px 12px;
+            border: 1px solid rgba(184, 148, 100, 0.3);
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        #totalDaysDisplay:hover {
+            background: rgba(184, 148, 100, 0.1);
+            border-color: var(--gold);
+        }
+
         /* --- HERO --- */
         .hero {
             height: 60vh;
@@ -377,6 +390,151 @@
             font-size: 0.9rem;
         }
 
+        /* --- CALENDAR MODAL --- */
+        #calendarModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 17, 21, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        #calendarModal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .calendar-container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--bg-card);
+            border: 1px solid rgba(184, 148, 100, 0.3);
+            border-radius: 2rem;
+            padding: 3rem;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: relative;
+            animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.9) translateY(30px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .close-calendar {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: none;
+            border: 1px solid rgba(184, 148, 100, 0.3);
+            color: var(--gold);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .close-calendar:hover {
+            background: var(--red-imperial);
+            color: white;
+            border-color: var(--red-imperial);
+        }
+
+        .calendar-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .calendar-header h2 {
+            font-size: 3rem;
+            color: var(--red-imperial);
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+        }
+
+        .calendar-header p {
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            position: relative;
+        }
+
+        .calendar-day-label {
+            text-align: center;
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(184, 148, 100, 0.2);
+        }
+
+        .calendar-cell {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            position: relative;
+            border: 1px solid rgba(184, 148, 100, 0.05);
+            transition: 0.3s;
+        }
+
+        .calendar-cell.current-month {
+            color: var(--text-main);
+        }
+
+        .calendar-cell:hover {
+            background: rgba(184, 148, 100, 0.05);
+        }
+
+        .calendar-bar {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 8px;
+            border-radius: 4px;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+
+        .calendar-bar-label {
+            position: absolute;
+            top: -18px;
+            left: 5px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: inherit;
+            opacity: 0.9;
+        }
+
         footer {
             background: #080a0d;
             padding: 4rem;
@@ -402,7 +560,7 @@
         <div class="header-content">
             <h1>CHINAAAA</h1>
             <div class="header-info">
-                <span><span id="totalDays">0</span> JOURS</span>
+                <span id="totalDaysDisplay"><span id="totalDays">0</span> JOURS</span>
             </div>
         </div>
     </header>
@@ -426,6 +584,28 @@
         </div>
 
         <div class="destinations" id="destContainer"></div>
+    </div>
+
+    <!-- CALENDAR MODAL -->
+    <div id="calendarModal">
+        <div class="calendar-container">
+            <button class="close-calendar" id="closeCalendar">&times;</button>
+            <div class="calendar-header">
+                <h2>DÉCEMBRE</h2>
+                <p>Itinéraire Chine 2026</p>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Labels -->
+                <div class="calendar-day-label">Lun</div>
+                <div class="calendar-day-label">Mar</div>
+                <div class="calendar-day-label">Mer</div>
+                <div class="calendar-day-label">Jeu</div>
+                <div class="calendar-day-label">Ven</div>
+                <div class="calendar-day-label">Sam</div>
+                <div class="calendar-day-label">Dim</div>
+                <!-- Cells will be injected here -->
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -464,36 +644,41 @@
         const db = getDatabase(app);
 
         const defaultDests = [
-            { id: 'shanghai-1', city: 'Shanghai', days: 6, order: 1, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: [], links: [], transport: 'Avion', icone: '🏙️' },
-            { id: 'zhangjiajie', city: 'Zhangjiajie', days: 4, order: 2, image: 'https://i.ibb.co/G35bBvKc/alexander-schimmeck-ZOu-Iaoca-NDA-unsplash.jpg', lat: 29.3996, lng: 110.4848, activities: [], links: [], transport: 'Train', icone: '🏔️' },
-            { id: 'furong', city: 'Furong', days: 1, order: 3, image: 'https://i.ibb.co/d4XXQhRJ/tao-yuan-7ak-Moq-Qk-AO0-unsplash.jpg', lat: 28.8433, lng: 109.9338, activities: [], links: [], transport: 'Bus', icone: '🌸' },
-            { id: 'chongqing', city: 'Chongqing', days: 4, order: 4, image: 'https://i.ibb.co/h12tnHRY/cling-yong-g-LNV8i-VCF9g-unsplash.jpg', lat: 29.5630, lng: 106.5516, activities: [], links: [], transport: 'Train', icone: '🌉' },
-            { id: 'chengdu', city: 'Chengdu', days: 2, order: 5, image: 'https://i.ibb.co/NgpRQVdx/emma-lau-STSKtlrzz-YM-unsplash.jpg', lat: 30.5728, lng: 104.0668, activities: [], links: [], transport: 'Train', icone: '🐼' },
-            { id: 'shanghai-2', city: 'Shanghai', days: 6, order: 6, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: [], links: [], transport: 'Avion', icone: '🏙️' }
+            { id: 'shanghai-1', city: 'Shanghai', days: 6, order: 1, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: [], links: [], transport: 'Avion', icone: '🏙️', color: '#4A7C7E' },
+            { id: 'zhangjiajie', city: 'Zhangjiajie', days: 4, order: 2, image: 'https://i.ibb.co/G35bBvKc/alexander-schimmeck-m-S9-U1-G0-G8-unsplash.jpg', lat: 29.117, lng: 110.479, activities: [], links: [], transport: 'Train', icone: '🏔️', color: '#8e44ad' },
+            { id: 'furong', city: 'Furong', days: 2, order: 3, image: 'https://i.ibb.co/m5Ym7vC1/marcus-dietachmair-Uf-N1-Zq56-E-unsplash.jpg', lat: 28.745, lng: 109.913, activities: [], links: [], transport: 'Train', icone: '🌸', color: '#e67e22' },
+            { id: 'chongqing', city: 'Chongqing', days: 4, order: 4, image: 'https://i.ibb.co/99YvB6L0/li-yang-Xm-Z-U4-Wp-M-unsplash.jpg', lat: 29.563, lng: 106.551, activities: [], links: [], transport: 'Train', icone: '🌉', color: '#27ae60' },
+            { id: 'chengdu', city: 'Chengdu', days: 3, order: 5, image: 'https://i.ibb.co/8L6vGfS6/yu-zhao-G-r-Z9-W5u-Xw-unsplash.jpg', lat: 30.657, lng: 104.066, activities: [], links: [], transport: 'Train', icone: '🐼', color: '#f1c40f' }
         ];
 
         let destinations = [];
-        let map = null;
+        let map;
+        let markers = [];
 
         function initMap() {
-            if (map) map.remove();
-            map = L.map('map', { zoomControl: false }).setView([29.8, 108.5], 5.0);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png').addTo(map);
+            if(map) return;
+            map = L.map('map', { zoomControl: false, attributionControl: false }).setView([30, 110], 5);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+        }
 
-            const sorted = [...destinations].sort((a,b) => a.order - b.order);
-            sorted.forEach(d => {
-                const icon = L.divIcon({
-                    html: `<span>${d.icone || '📍'}</span>`,
-                    className: 'custom-map-marker',
-                    iconSize: [50, 50],
-                    iconAnchor: [25, 25]
-                });
-                L.marker([d.lat, d.lng], { icon }).addTo(map).bindTooltip(d.city);
+        function updateMarkers() {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+            const coords = [];
+            destinations.sort((a,b) => a.order - b.order).forEach(d => {
+                const m = L.marker([d.lat, d.lng], {
+                    icon: L.divIcon({
+                        className: 'custom-map-marker',
+                        html: `<span>${d.icone}</span>`,
+                        iconSize: [50, 50]
+                    })
+                }).addTo(map);
+                markers.push(m);
+                coords.push([d.lat, d.lng]);
             });
-
-            if(sorted.length > 1) {
-                const pts = sorted.map(d => [d.lat, d.lng]);
-                L.polyline(pts, { color: '#b89464', weight: 2, opacity: 0.4, dashArray: '5, 10' }).addTo(map);
+            if(coords.length > 1) {
+                L.polyline(coords, { color: 'var(--gold)', weight: 3, dashArray: '10, 10', opacity: 0.6 }).addTo(map);
+                map.fitBounds(L.latLngBounds(coords), { padding: [50, 50] });
             }
         }
 
@@ -506,6 +691,8 @@
                 }
                 render();
                 initMap();
+                updateMarkers();
+                renderCalendar();
             });
         }
 
@@ -554,7 +741,7 @@
                     <div class="destination-image"><img src="${d.image}"></div>
                     <div class="destination-content">
                         <div class="destination-header">
-                            <div class="destination-number">${i+1}</div>
+                            <div class="destination-number" style="background: ${d.color || 'var(--red-imperial)'}">${i+1}</div>
                             <h3>${d.city}</h3>
                         </div>
                         <div class="days-input"><input type="number" value="${d.days}" onchange="upDays('${d.id}', this.value)"> jours</div>
@@ -592,6 +779,80 @@
             });
             document.getElementById('totalDays').textContent = destinations.reduce((s, d) => s + d.days, 0);
         }
+
+        /* CALENDAR LOGIC */
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            // Keep labels
+            const labels = Array.from(grid.querySelectorAll('.calendar-day-label'));
+            grid.innerHTML = '';
+            labels.forEach(l => grid.appendChild(l));
+
+            // Dec 2026 starts on Tuesday (index 1 in 0-6 range if Mon=0)
+            // But we'll use standard 1=Mon, 2=Tue...
+            // Dec 1st 2026 is a Tuesday.
+            const startOffset = 1; // 1 empty cell for Monday
+            
+            // Add empty cells for offset
+            for(let i=0; i<startOffset; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-cell';
+                grid.appendChild(cell);
+            }
+
+            // Add 31 days
+            for(let i=1; i<=31; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-cell current-month';
+                cell.id = `day-${i}`;
+                cell.innerHTML = `<span>${i}</span>`;
+                grid.appendChild(cell);
+            }
+
+            // Calculate stays
+            let currentDay = 1;
+            destinations.sort((a,b) => a.order - b.order).forEach((d, idx) => {
+                if(d.days <= 0) return;
+                
+                const start = currentDay;
+                const end = Math.min(31, currentDay + d.days - 1);
+                
+                // Draw bars for each day of the stay
+                for(let day = start; day <= end; day++) {
+                    const cell = document.getElementById(`day-${day}`);
+                    if(cell) {
+                        const bar = document.createElement('div');
+                        bar.className = 'calendar-bar';
+                        bar.style.backgroundColor = d.color;
+                        bar.style.bottom = `${15 + (idx * 10)}px`; // Stack bars if needed, but here we just place them
+                        
+                        // If it's the first day of the city, add a label
+                        if(day === start) {
+                            const label = document.createElement('div');
+                            label.className = 'calendar-bar-label';
+                            label.style.color = d.color;
+                            label.textContent = d.city;
+                            bar.appendChild(label);
+                        }
+                        
+                        cell.appendChild(bar);
+                    }
+                }
+                currentDay += d.days;
+            });
+        }
+
+        // Modal Controls
+        const modal = document.getElementById('calendarModal');
+        document.getElementById('totalDaysDisplay').onclick = () => {
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        };
+        document.getElementById('closeCalendar').onclick = () => {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 400);
+        };
+        window.onclick = (e) => { if(e.target === modal) document.getElementById('closeCalendar').click(); };
 
         window.upDays = (id, v) => { set(ref(db, `destinations/${id}/days`), parseInt(v)); };
         window.upTrans = (id, t) => { set(ref(db, `destinations/${id}/transport`), t); };
