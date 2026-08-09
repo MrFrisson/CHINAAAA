@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHINAAAA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #F5F1E8;
+            color: #1A1A1A;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #D9D3C8;
+            padding: 1rem 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content h1 {
+            font-size: 1.8rem;
+            color: #8B0000;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .header-info {
+            font-size: 0.9rem;
+            color: #666666;
+        }
+
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('https://i.ibb.co/p6RjypTH/jennifer-chen-Pnc2-Uxb7-PG0-unsplash.jpg') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-top: 60px;
+        }
+
+        .hero-content h2 {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 8px;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .map-section {
+            background: white;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .map-section h2 {
+            text-align: center;
+            color: #8B0000;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        #map {
+            width: 100%;
+            height: 500px;
+            border-radius: 1rem;
+            z-index: 10;
+        }
+
+        .leaflet-popup-content {
+            text-align: center;
+            font-weight: 600;
+            color: #8B0000;
+        }
+
+        .map-icon {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 3px solid #8B0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: #8B0000;
+            margin-bottom: 0.5rem;
+        }
+
+        .destinations {
+            display: grid;
+            gap: 3rem;
+            padding: 2rem 0;
+        }
+
+        .destination-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: flex-start;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .destination-card:nth-child(even) {
+            direction: rtl;
+        }
+
+        .destination-card > * {
+            direction: ltr;
+        }
+
+        .destination-image {
+            width: 100%;
+            height: 300px;
+            background-color: #E8E3D8;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .destination-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .destination-card:hover .destination-image img {
+            transform: scale(1.1);
+        }
+
+        .destination-content {
+            padding: 1rem;
+        }
+
+        .destination-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .destination-number {
+            width: 70px;
+            height: 70px;
+            background-color: #8B0000;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .destination-header-text h3 {
+            font-size: 2rem;
+            color: #8B0000;
+            margin-bottom: 0.5rem;
+        }
+
+        .days-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .days-input label {
+            font-weight: 600;
+            color: #8B0000;
+        }
+
+        .days-input input {
+            width: 60px;
+            padding: 0.5rem;
+            border: 2px solid #D9D3C8;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .days-input input:focus {
+            outline: none;
+            border-color: #8B0000;
+        }
+
+        .transport-selector {
+            margin-bottom: 1rem;
+        }
+
+        .transport-selector label {
+            display: block;
+            font-weight: 600;
+            color: #8B0000;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .transport-options {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .transport-btn {
+            padding: 0.75rem 1rem;
+            border: 2px solid #D9D3C8;
+            background: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .transport-btn:hover {
+            border-color: #8B0000;
+            background-color: #F5F1E8;
+        }
+
+        .transport-btn.active {
+            background-color: #8B0000;
+            color: white;
+            border-color: #8B0000;
+        }
+
+        .activities {
+            margin-bottom: 1.5rem;
+        }
+
+        .activities label {
+            display: block;
+            font-weight: 600;
+            color: #8B0000;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .activity-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #F5F1E8;
+            border: 1px solid #D4AF37;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            color: #1A1A1A;
+        }
+
+        .activity-tag button {
+            background: none;
+            border: none;
+            color: #8B0000;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0;
+            font-size: 1rem;
+        }
+
+        .add-activity {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .add-activity input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #D9D3C8;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .add-activity button {
+            padding: 0.5rem 1rem;
+            background-color: #D4AF37;
+            color: #1A1A1A;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .links {
+            margin-bottom: 1.5rem;
+        }
+
+        .links label {
+            display: block;
+            font-weight: 600;
+            color: #8B0000;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .link-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .link-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #E8F0F7;
+            border: 1px solid #4A7C7E;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            color: #1A1A1A;
+            max-width: 200px;
+        }
+
+        .link-tag a {
+            color: #4A7C7E;
+            text-decoration: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .link-tag button {
+            background: none;
+            border: none;
+            color: #8B0000;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .add-link {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .add-link input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #D9D3C8;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .add-link button {
+            padding: 0.5rem 1rem;
+            background-color: #4A7C7E;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, #8B0000, #D4AF37);
+            border-radius: 2px;
+            margin-top: 1rem;
+        }
+
+        footer {
+            background-color: #1A1A1A;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666666;
+        }
+
+        .spinner {
+            border: 4px solid #E8E3D8;
+            border-top: 4px solid #8B0000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .destination-card {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h2 {
+                font-size: 3rem;
+                letter-spacing: 4px;
+            }
+
+            #map {
+                height: 300px;
+            }
+        }
+
+        .save-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background-color: #4A7C7E;
+            color: white;
+            border-radius: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>CHINAAAA</h1>
+            <div class="header-info">
+                <span id="totalDays">23</span> jours
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" style="background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('https://i.ibb.co/p6RjypTH/jennifer-chen-Pnc2-Uxb7-PG0-unsplash.jpg') center/cover;">
+        <div class="hero-content">
+            <h2>CHINAAAA</h2>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="map-section">
+            <h2>Votre route</h2>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <section class="section-title">
+            <h2>Itineraire</h2>
+        </section>
+
+        <div class="destinations" id="destinationsContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Chargement...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Bon voyage !</p>
+    </footer>
+
+    <div class="save-indicator" id="saveIndicator">Enregistre</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA9HSsYr_LCyAEpZS4zY9i69zQaG2zXNbw",
+            authDomain: "chinaaaaa.firebaseapp.com",
+            databaseURL: "https://chinaaaaa-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "chinaaaaa",
+            storageBucket: "chinaaaaa.firebasestorage.app",
+            messagingSenderId: "663888608273",
+            appId: "1:663888608273:web:3720af2baa1120673cc5b0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const defaultDestinations = [
+            { id: 'shanghai-1', city: 'Shanghai', days: 6, order: 1, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: ['The Bund', 'Yu Garden', 'Jade Buddha Temple'], links: [], transport: 'Avion', icon: '/manus-storage/shanghai-icon_0fd2b9a2.png' },
+            { id: 'zhangjiajie', city: 'Zhangjiajie', days: 4, order: 2, image: 'https://i.ibb.co/G35bBvKc/alexander-schimmeck-ZOu-Iaoca-NDA-unsplash.jpg', lat: 29.3255, lng: 110.4601, activities: ['National Forest Park', 'Glass Skywalk', 'Bailong Elevator'], links: [], transport: 'Train', icon: '/manus-storage/zhangjiajie-icon_6047f075.png' },
+            { id: 'furong', city: 'Furong', days: 1, order: 3, image: 'https://i.ibb.co/d4XXQhRJ/tao-yuan-7ak-Moq-Qk-AO0-unsplash.jpg', lat: 29.0383, lng: 110.0437, activities: ['Vieille ville', 'Marche local', 'Artisanat'], links: [], transport: 'Bus', icon: '/manus-storage/furong-icon_b5aad052.png' },
+            { id: 'chongqing', city: 'Chongqing', days: 4, order: 4, image: 'https://i.ibb.co/h12tnHRY/cling-yong-g-LNV8i-VCF9g-unsplash.jpg', lat: 29.5630, lng: 106.5516, activities: ['Hongya Cave', 'Yangtze River', 'Dazu Rock'], links: [], transport: 'Train', icon: '/manus-storage/chongqing-icon_32bee30e.png' },
+            { id: 'chengdu', city: 'Chengdu', days: 2, order: 5, image: 'https://i.ibb.co/NgpRQVdx/emma-lau-STSKtlrzz-YM-unsplash.jpg', lat: 30.5728, lng: 104.0668, activities: ['Panda Base', 'Wuhou Shrine', 'Jinli Street'], links: [], transport: 'Train', icon: '/manus-storage/chengdu-icon_cdf634a4.png' },
+            { id: 'shanghai-2', city: 'Shanghai', days: 6, order: 6, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: ['Shopping', 'Musees', 'Rooftop bars'], links: [], transport: 'Avion', icon: '/manus-storage/shanghai-icon_0fd2b9a2.png' }
+        ];
+
+        const transportOptions = [
+            { emoji: '🚂', label: 'Train' },
+            { emoji: '✈️', label: 'Avion' },
+            { emoji: '🚌', label: 'Bus' },
+            { emoji: '🚗', label: 'Voiture' },
+            { emoji: '🚶', label: 'A pied' }
+        ];
+
+        let destinations = [];
+        let map = null;
+
+        function initMap() {
+            if (map) map.remove();
+            map = L.map('map').setView([30, 110], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OpenStreetMap', maxZoom: 19 }).addTo(map);
+
+            const sortedDests = destinations.sort((a, b) => a.order - b.order);
+            const latlngs = [];
+
+            sortedDests.forEach((dest, index) => {
+                const customIcon = L.icon({
+                    iconUrl: dest.icon,
+                    iconSize: [50, 50],
+                    iconAnchor: [25, 25],
+                    popupAnchor: [0, -25]
+                });
+
+                L.marker([dest.lat, dest.lng], { icon: customIcon }).bindPopup('<strong>' + (index + 1) + '. ' + dest.city + '</strong><br>' + dest.days + ' jours').addTo(map);
+                latlngs.push([dest.lat, dest.lng]);
+            });
+
+            if (latlngs.length > 1) {
+                L.polyline(latlngs, { color: '#D4AF37', weight: 3, opacity: 0.7 }).addTo(map);
+            }
+
+            if (latlngs.length > 0) {
+                const group = new L.featureGroup(latlngs.map(ll => L.marker(ll)));
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+
+        function loadDestinations() {
+            onValue(ref(db, 'destinations'), (snapshot) => {
+                if (snapshot.exists()) {
+                    const rawData = Object.values(snapshot.val());
+                    destinations = rawData.map(dest => {
+                        const defaultDest = defaultDestinations.find(d => d.id === dest.id);
+                        return {
+                            ...defaultDest,
+                            ...dest,
+                            activities: Array.isArray(dest.activities) ? dest.activities : (defaultDest?.activities || []),
+                            links: Array.isArray(dest.links) ? dest.links : (defaultDest?.links || [])
+                        };
+                    });
+                } else {
+                    destinations = JSON.parse(JSON.stringify(defaultDestinations));
+                    saveAllDestinations();
+                }
+                renderDestinations();
+                initMap();
+            }, (error) => {
+                console.error('Erreur:', error);
+                destinations = JSON.parse(JSON.stringify(defaultDestinations));
+                renderDestinations();
+                initMap();
+            });
+        }
+
+        function renderDestinations() {
+            const container = document.getElementById('destinationsContainer');
+            container.innerHTML = '';
+
+            destinations.sort((a, b) => a.order - b.order).forEach((dest, index) => {
+                const ordinalNumbers = ['1er', '2e', '3e', '4e', '5e', '6e'];
+                const ordinal = ordinalNumbers[index] || (index + 1) + 'e';
+
+                const activities = Array.isArray(dest.activities) ? dest.activities : [];
+                const links = Array.isArray(dest.links) ? dest.links : [];
+                const transport = dest.transport || 'Avion';
+                const image = dest.image || defaultDestinations.find(d => d.id === dest.id)?.image;
+
+                const card = document.createElement('div');
+                card.className = 'destination-card';
+                card.style.animationDelay = (index * 0.1) + 's';
+
+                let activitiesHTML = '';
+                for (let i = 0; i < activities.length; i++) {
+                    activitiesHTML += '<span class="activity-tag">' + activities[i] + '<button type="button" onclick="removeActivityBtn(\'' + dest.id + '\', ' + i + ')">x</button></span>';
+                }
+
+                let linksHTML = '';
+                for (let i = 0; i < links.length; i++) {
+                    linksHTML += '<span class="link-tag"><a href="' + links[i] + '" target="_blank">Lien</a><button type="button" onclick="removeLinkBtn(\'' + dest.id + '\', ' + i + ')">x</button></span>';
+                }
+
+                let transportHTML = '';
+                for (let i = 0; i < transportOptions.length; i++) {
+                    const opt = transportOptions[i];
+                    const isActive = transport === opt.label ? 'active' : '';
+                    transportHTML += '<button type="button" class="transport-btn ' + isActive + '" onclick="updateTransport(\'' + dest.id + '\', \'' + opt.label + '\')">' + opt.emoji + ' ' + opt.label + '</button>';
+                }
+
+                card.innerHTML = '<div class="destination-image"><img src="' + image + '" alt="' + dest.city + '"></div><div class="destination-content"><div class="destination-header"><div class="destination-number">' + ordinal + '</div><div class="destination-header-text"><h3>' + dest.city + '</h3></div></div><div class="days-input"><label>Duree :</label><input type="number" value="' + dest.days + '" min="1" max="30" onchange="updateDays(\'' + dest.id + '\', parseInt(this.value))"><span>jour' + (dest.days > 1 ? 's' : '') + '</span></div><div class="transport-selector"><label>Transport</label><div class="transport-options">' + transportHTML + '</div></div><div class="activities"><label>Endroits</label><div class="activity-list">' + activitiesHTML + '</div><div class="add-activity"><input type="text" placeholder="Ajouter..." id="new-activity-' + dest.id + '"><button type="button" onclick="addActivityBtn(\'' + dest.id + '\')">+</button></div></div><div class="links"><label>Liens</label><div class="link-list">' + linksHTML + '</div><div class="add-link"><input type="url" placeholder="Coller un lien..." id="new-link-' + dest.id + '"><button type="button" onclick="addLinkBtn(\'' + dest.id + '\')">+</button></div></div><div class="divider"></div></div>';
+
+                container.appendChild(card);
+            });
+
+            updateStats();
+        }
+
+        window.updateDays = function(destId, value) {
+            const dest = destinations.find(d => d.id === destId);
+            if (dest) {
+                dest.days = value;
+                set(ref(db, 'destinations/' + destId + '/days'), value);
+                showSaveIndicator();
+                updateStats();
+            }
+        };
+
+        window.updateTransport = function(destId, transport) {
+            const dest = destinations.find(d => d.id === destId);
+            if (dest) {
+                dest.transport = transport;
+                set(ref(db, 'destinations/' + destId + '/transport'), transport);
+                renderDestinations();
+                showSaveIndicator();
+            }
+        };
+
+        window.addActivityBtn = function(destId) {
+            const input = document.getElementById('new-activity-' + destId);
+            const value = input.value.trim();
+            if (value) {
+                const dest = destinations.find(d => d.id === destId);
+                if (dest) {
+                    if (!Array.isArray(dest.activities)) dest.activities = [];
+                    dest.activities.push(value);
+                    set(ref(db, 'destinations/' + destId + '/activities'), dest.activities);
+                    input.value = '';
+                    renderDestinations();
+                    showSaveIndicator();
+                }
+            }
+        };
+
+        window.removeActivityBtn = function(destId, index) {
+            const dest = destinations.find(d => d.id === destId);
+            if (dest && Array.isArray(dest.activities) && dest.activities.length > index) {
+                dest.activities.splice(index, 1);
+                set(ref(db, 'destinations/' + destId + '/activities'), dest.activities);
+                renderDestinations();
+                showSaveIndicator();
+            }
+        };
+
+        window.addLinkBtn = function(destId) {
+            const input = document.getElementById('new-link-' + destId);
+            const value = input.value.trim();
+            if (value) {
+                const dest = destinations.find(d => d.id === destId);
+                if (dest) {
+                    if (!Array.isArray(dest.links)) dest.links = [];
+                    dest.links.push(value);
+                    set(ref(db, 'destinations/' + destId + '/links'), dest.links);
+                    input.value = '';
+                    renderDestinations();
+                    showSaveIndicator();
+                }
+            }
+        };
+
+        window.removeLinkBtn = function(destId, index) {
+            const dest = destinations.find(d => d.id === destId);
+            if (dest && Array.isArray(dest.links) && dest.links.length > index) {
+                dest.links.splice(index, 1);
+                set(ref(db, 'destinations/' + destId + '/links'), dest.links);
+                renderDestinations();
+                showSaveIndicator();
+            }
+        };
+
+        function saveAllDestinations() {
+            const data = {};
+            destinations.forEach(dest => {
+                data[dest.id] = dest;
+            });
+            set(ref(db, 'destinations'), data);
+        }
+
+        function updateStats() {
+            const totalDays = destinations.reduce((sum, d) => sum + d.days, 0);
+            document.getElementById('totalDays').textContent = totalDays;
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        loadDestinations();
+    </script>
+</body>
+</html>
