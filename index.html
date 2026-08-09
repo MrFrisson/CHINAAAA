@@ -180,17 +180,10 @@
         }
 
         /* --- DESTINATIONS --- */
-        .section-title h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: var(--gold);
-            margin-bottom: 3rem;
-            letter-spacing: 2px;
-        }
-
         .destinations {
             display: grid;
             gap: 4rem;
+            padding-top: 2rem;
             padding-bottom: 5rem;
         }
 
@@ -432,9 +425,6 @@
             </div>
         </div>
 
-        <section class="section-title">
-        </section>
-
         <div class="destinations" id="destContainer"></div>
     </div>
 
@@ -493,7 +483,7 @@
             const sorted = [...destinations].sort((a,b) => a.order - b.order);
             sorted.forEach(d => {
                 const icon = L.divIcon({
-                    html: `<span>${d.icone || ''}</span>`,
+                    html: `<span>${d.icone || '📍'}</span>`,
                     className: 'custom-map-marker',
                     iconSize: [50, 50],
                     iconAnchor: [25, 25]
@@ -526,7 +516,6 @@
         function render() {
             const cont = document.getElementById('destContainer');
             cont.innerHTML = '';
-            let globalBudget = 0;
 
             destinations.sort((a,b) => a.order - b.order).forEach((d, i) => {
                 const card = document.createElement('div');
@@ -539,7 +528,7 @@
                     cityBudget += (a.price || 0);
                     return `
                     <div class="item-row">
-                        <div class="item-main"><span> ${a.name}</span></div>
+                        <div class="item-main"><span>${a.name}</span></div>
                         <div style="display:flex; align-items:center;">
                             ${a.price ? `<span class="price-badge">${a.price}€</span>` : ''}
                             <button class="remove-item" onclick="removeItem('${d.id}', 'activities', ${idx})">×</button>
@@ -551,15 +540,13 @@
                     cityBudget += (l.price || 0);
                     return `
                     <div class="item-row">
-                        <div class="item-main"><a href="${l.url}" target="_blank">🔗 ${getDomain(l.url)}</a></div>
+                        <div class="item-main"><a href="${l.url}" target="_blank">${getDomain(l.url)}</a></div>
                         <div style="display:flex; align-items:center;">
                             ${l.price ? `<span class="price-badge">${l.price}€</span>` : ''}
                             <button class="remove-item" onclick="removeItem('${d.id}', 'links', ${idx})">×</button>
                         </div>
                     </div>`;
                 }).join('');
-
-                globalBudget += cityBudget;
 
                 const trans = ['Train', 'Avion', 'Bus'].map(t => `<button class="transport-btn ${d.transport === t ? 'active' : ''}" onclick="upTrans('${d.id}', '${t}')">${t}</button>`).join('');
 
@@ -604,7 +591,6 @@
                 cont.appendChild(card);
             });
             document.getElementById('totalDays').textContent = destinations.reduce((s, d) => s + d.days, 0);
-            document.getElementById('totalBudget').textContent = globalBudget;
         }
 
         window.upDays = (id, v) => { set(ref(db, `destinations/${id}/days`), parseInt(v)); };
