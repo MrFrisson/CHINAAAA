@@ -83,46 +83,82 @@
             padding: 2rem;
         }
 
+        /* Styles pour la nouvelle carte */
         .map-section {
-            background: white;
-            padding: 3rem 2rem;
+            background: #132433; /* Fond sombre pour matcher la nouvelle carte */
+            padding: 1rem;
             margin: 2rem 0;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 50px -8px rgba(0,0,0,0.9), 0 0 0 2px #3a5777 inset;
+            overflow: hidden;
+            position: relative;
         }
 
         .map-section h2 {
             text-align: center;
-            color: #8B0000;
-            margin-bottom: 2rem;
+            color: #f5e8d6;
+            margin: 1.5rem 0;
             font-size: 2rem;
         }
 
         #map {
             width: 100%;
-            height: 500px;
-            border-radius: 1rem;
-            z-index: 10;
+            height: 700px;
+            background: #142c42;
+            border-radius: 2rem;
         }
 
-        .leaflet-popup-content {
-            text-align: center;
-            font-weight: 600;
-            color: #8B0000;
+        /* Styles Leaflet Custom pour la carte sombre */
+        .leaflet-control-zoom {
+            border: none !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6) !important;
+            border-radius: 40px !important;
+            backdrop-filter: blur(4px);
+            background: rgba(12, 25, 40, 0.7) !important;
+            border: 1px solid rgba(200, 180, 150, 0.2) !important;
         }
-
-        .map-icon {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border: 3px solid #8B0000;
-            border-radius: 50%;
+        .leaflet-control-zoom a {
+            color: #d4cdc0 !important;
+            background: transparent !important;
+            font-weight: 300 !important;
+            font-size: 1.3rem !important;
+        }
+        .leaflet-tooltip {
+            background: rgba(8, 18, 32, 0.85) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid #b89464 !important;
+            border-radius: 40px !important;
+            color: #f5e8d6 !important;
+            font-size: 1rem !important;
+            padding: 6px 18px !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.7) !important;
+        }
+        .marqueur-itineraire {
+            background: transparent !important;
+            border: none !important;
+        }
+        .legende {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(6, 16, 28, 0.65);
+            backdrop-filter: blur(8px);
+            padding: 8px 20px 8px 18px;
+            border-radius: 60px;
+            border-left: 3px solid #dbaa6b;
+            color: #d6cdbb;
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            gap: 16px;
+            z-index: 1000;
+            pointer-events: none;
         }
+        .legende span { display: flex; align-items: center; gap: 6px; }
+        .legende i { font-style: normal; font-size: 1.4rem; line-height: 1; }
 
         .section-title {
             text-align: center;
@@ -475,8 +511,9 @@
             }
 
             #map {
-                height: 300px;
+                height: 500px;
             }
+            .legende { bottom: 20px; left: 20px; padding: 6px 14px; flex-wrap: wrap; gap: 8px; font-size: 0.7rem; }
         }
 
         .save-indicator {
@@ -496,6 +533,27 @@
         .save-indicator.show {
             opacity: 1;
         }
+
+        /* Styles spécifiques pour la nouvelle carte */
+        .tooltip-ville {
+            background: rgba(8, 18, 32, 0.8) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid #b89464 !important;
+            border-radius: 40px !important;
+            color: #f5e8d6 !important;
+            font-size: 0.95rem !important;
+            font-weight: 400 !important;
+            padding: 4px 18px !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.7) !important;
+            letter-spacing: 0.4px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .tooltip-ville::before {
+            border-top-color: #b89464 !important;
+        }
+        .leaflet-tile-pane {
+            filter: saturate(0.8) contrast(1.1);
+        }
     </style>
 </head>
 <body>
@@ -508,7 +566,7 @@
         </div>
     </header>
 
-    <section class="hero" style="background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('https://i.ibb.co/p6RjypTH/jennifer-chen-Pnc2-Uxb7-PG0-unsplash.jpg') center/cover;">
+    <section class="hero">
         <div class="hero-content">
             <h2>CHINAAAA</h2>
         </div>
@@ -518,6 +576,14 @@
         <div class="map-section">
             <h2>Votre route</h2>
             <div id="map"></div>
+            <div class="legende">
+                <span><i>🏙️</i> Shanghai</span>
+                <span><i>🏔️</i> Zhangjiajie</span>
+                <span><i>🌸</i> Furong</span>
+                <span><i>🌉</i> Chongqing</span>
+                <span><i>🐼</i> Chengdu</span>
+                <span style="opacity:0.5; margin-left:4px;">⤵ itinéraire</span>
+            </div>
         </div>
     </div>
 
@@ -559,12 +625,12 @@
         const db = getDatabase(app);
 
         const defaultDestinations = [
-            { id: 'shanghai-1', city: 'Shanghai', days: 6, order: 1, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: ['The Bund', 'Yu Garden', 'Jade Buddha Temple'], links: [], transport: 'Avion', icon: '/manus-storage/shanghai-icon_0fd2b9a2.png' },
-            { id: 'zhangjiajie', city: 'Zhangjiajie', days: 4, order: 2, image: 'https://i.ibb.co/G35bBvKc/alexander-schimmeck-ZOu-Iaoca-NDA-unsplash.jpg', lat: 29.3255, lng: 110.4601, activities: ['National Forest Park', 'Glass Skywalk', 'Bailong Elevator'], links: [], transport: 'Train', icon: '/manus-storage/zhangjiajie-icon_6047f075.png' },
-            { id: 'furong', city: 'Furong', days: 1, order: 3, image: 'https://i.ibb.co/d4XXQhRJ/tao-yuan-7ak-Moq-Qk-AO0-unsplash.jpg', lat: 29.0383, lng: 110.0437, activities: ['Vieille ville', 'Marche local', 'Artisanat'], links: [], transport: 'Bus', icon: '/manus-storage/furong-icon_b5aad052.png' },
-            { id: 'chongqing', city: 'Chongqing', days: 4, order: 4, image: 'https://i.ibb.co/h12tnHRY/cling-yong-g-LNV8i-VCF9g-unsplash.jpg', lat: 29.5630, lng: 106.5516, activities: ['Hongya Cave', 'Yangtze River', 'Dazu Rock'], links: [], transport: 'Train', icon: '/manus-storage/chongqing-icon_32bee30e.png' },
-            { id: 'chengdu', city: 'Chengdu', days: 2, order: 5, image: 'https://i.ibb.co/NgpRQVdx/emma-lau-STSKtlrzz-YM-unsplash.jpg', lat: 30.5728, lng: 104.0668, activities: ['Panda Base', 'Wuhou Shrine', 'Jinli Street'], links: [], transport: 'Train', icon: '/manus-storage/chengdu-icon_cdf634a4.png' },
-            { id: 'shanghai-2', city: 'Shanghai', days: 6, order: 6, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: ['Shopping', 'Musees', 'Rooftop bars'], links: [], transport: 'Avion', icon: '/manus-storage/shanghai-icon_0fd2b9a2.png' }
+            { id: 'shanghai-1', city: 'Shanghai', days: 6, order: 1, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: ['The Bund', 'Yu Garden', 'Jade Buddha Temple'], links: [], transport: 'Avion', icone: '🏙️' },
+            { id: 'zhangjiajie', city: 'Zhangjiajie', days: 4, order: 2, image: 'https://i.ibb.co/G35bBvKc/alexander-schimmeck-ZOu-Iaoca-NDA-unsplash.jpg', lat: 29.3996, lng: 110.4848, activities: ['National Forest Park', 'Glass Skywalk', 'Bailong Elevator'], links: [], transport: 'Train', icone: '🏔️' },
+            { id: 'furong', city: 'Furong', days: 1, order: 3, image: 'https://i.ibb.co/d4XXQhRJ/tao-yuan-7ak-Moq-Qk-AO0-unsplash.jpg', lat: 28.8433, lng: 109.9338, activities: ['Vieille ville', 'Marche local', 'Artisanat'], links: [], transport: 'Bus', icone: '🌸' },
+            { id: 'chongqing', city: 'Chongqing', days: 4, order: 4, image: 'https://i.ibb.co/h12tnHRY/cling-yong-g-LNV8i-VCF9g-unsplash.jpg', lat: 29.5630, lng: 106.5516, activities: ['Hongya Cave', 'Yangtze River', 'Dazu Rock'], links: [], transport: 'Train', icone: '🌉' },
+            { id: 'chengdu', city: 'Chengdu', days: 2, order: 5, image: 'https://i.ibb.co/NgpRQVdx/emma-lau-STSKtlrzz-YM-unsplash.jpg', lat: 30.5728, lng: 104.0668, activities: ['Panda Base', 'Wuhou Shrine', 'Jinli Street'], links: [], transport: 'Train', icone: '🐼' },
+            { id: 'shanghai-2', city: 'Shanghai', days: 6, order: 6, image: 'https://i.ibb.co/TfCJSnJ/freeman-zhou-o-V9hp8w-Xk-PE-unsplash.jpg', lat: 31.2304, lng: 121.4737, activities: ['Shopping', 'Musees', 'Rooftop bars'], links: [], transport: 'Avion', icone: '🏙️' }
         ];
 
         const transportOptions = [
@@ -580,31 +646,124 @@
 
         function initMap() {
             if (map) map.remove();
-            map = L.map('map').setView([30, 110], 5);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OpenStreetMap', maxZoom: 19 }).addTo(map);
+            map = L.map('map', {
+                zoomControl: true,
+                fadeAnimation: true,
+                zoomAnimation: true
+            }).setView([29.8, 108.5], 5.0);
 
-            const sortedDests = destinations.sort((a, b) => a.order - b.order);
-            const latlngs = [];
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; CartoDB',
+                subdomains: 'abcd',
+                maxZoom: 19,
+                minZoom: 3
+            }).addTo(map);
 
-            sortedDests.forEach((dest, index) => {
-                const customIcon = L.icon({
-                    iconUrl: dest.icon,
-                    iconSize: [50, 50],
-                    iconAnchor: [25, 25],
-                    popupAnchor: [0, -25]
+            const sortedDests = [...destinations].sort((a, b) => a.order - b.order);
+            
+            // Création des marqueurs avec les icônes de la nouvelle carte
+            sortedDests.forEach((dest) => {
+                const icone = dest.icone || '📍';
+                const html = `
+                    <div style="
+                        font-size: 1.9rem;
+                        line-height: 1;
+                        padding: 2px 8px 2px 6px;
+                        background: rgba(10, 22, 38, 0.5);
+                        backdrop-filter: blur(2px);
+                        border-radius: 40px;
+                        border: 1px solid rgba(210, 180, 140, 0.25);
+                        box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        filter: drop-shadow(0 2px 4px #00000066);
+                        transition: 0.15s;
+                    ">
+                        ${icone}
+                    </div>
+                `;
+                const customIcon = L.divIcon({
+                    html: html,
+                    className: 'marqueur-itineraire',
+                    iconSize: [48, 42],
+                    iconAnchor: [24, 42]
                 });
 
-                L.marker([dest.lat, dest.lng], { icon: customIcon }).bindPopup('<strong>' + (index + 1) + '. ' + dest.city + '</strong><br>' + dest.days + ' jours').addTo(map);
-                latlngs.push([dest.lat, dest.lng]);
+                const marker = L.marker([dest.lat, dest.lng], { icon: customIcon, riseOnHover: true }).addTo(map);
+                marker.bindTooltip(dest.city, {
+                    permanent: false,
+                    direction: 'top',
+                    className: 'tooltip-ville',
+                    offset: [0, -10],
+                    opacity: 0.95
+                });
             });
 
-            if (latlngs.length > 1) {
-                L.polyline(latlngs, { color: '#D4AF37', weight: 3, opacity: 0.7 }).addTo(map);
+            // Fonction pour créer une courbe (Bezier quadratique)
+            function createCurvedLine(lat1, lng1, lat2, lng2, curvature = 1.2, curveDown = true) {
+                const points = [];
+                const steps = 40;
+                const midLat = (lat1 + lat2) / 2;
+                const midLng = (lng1 + lng2) / 2;
+                const dLat = lat2 - lat1;
+                const dLng = lng2 - lng1;
+                const dist = Math.sqrt(dLat * dLat + dLng * dLng);
+                
+                let perpLat = -dLng / dist * curvature;
+                let perpLng = dLat / dist * curvature;
+                
+                const ctrlLatTest = midLat + perpLat * 0.8;
+                if (curveDown) {
+                    if (ctrlLatTest > midLat) { perpLat = -perpLat; perpLng = -perpLng; }
+                } else {
+                    if (ctrlLatTest < midLat) { perpLat = -perpLat; perpLng = -perpLng; }
+                }
+                
+                const ctrlLat = midLat + perpLat * 0.8;
+                const ctrlLng = midLng + perpLng * 0.8;
+                
+                for (let i = 0; i <= steps; i++) {
+                    const t = i / steps;
+                    const lat = Math.pow(1-t, 2) * lat1 + 2 * (1-t) * t * ctrlLat + Math.pow(t, 2) * lat2;
+                    const lng = Math.pow(1-t, 2) * lng1 + 2 * (1-t) * t * ctrlLng + Math.pow(t, 2) * lng2;
+                    points.push([lat, lng]);
+                }
+                return points;
             }
 
-            if (latlngs.length > 0) {
-                const group = new L.featureGroup(latlngs.map(ll => L.marker(ll)));
-                map.fitBounds(group.getBounds().pad(0.1));
+            // Tracé de l'itinéraire courbé
+            if (sortedDests.length > 1) {
+                const allPoints = [];
+                for (let i = 0; i < sortedDests.length; i++) {
+                    const current = sortedDests[i];
+                    const next = sortedDests[(i + 1) % sortedDests.length];
+                    const curveDown = i < sortedDests.length - 1; // La dernière boucle remonte
+                    
+                    const curvePoints = createCurvedLine(current.lat, current.lng, next.lat, next.lng, 1.5, curveDown);
+                    if (i === 0) allPoints.push(...curvePoints);
+                    else allPoints.push(...curvePoints.slice(1));
+                    
+                    if (i === sortedDests.length - 1) break; // On ne boucle pas l'affichage si on veut juste l'aller
+                }
+
+                L.polyline(allPoints, {
+                    color: '#dbaa6b',
+                    weight: 2.5,
+                    opacity: 0.7,
+                    smoothFactor: 2,
+                    lineCap: 'round',
+                    lineJoin: 'round'
+                }).addTo(map);
+
+                L.polyline(allPoints, {
+                    color: '#f0d8b0',
+                    weight: 8,
+                    opacity: 0.1,
+                    smoothFactor: 2,
+                    lineCap: 'round',
+                    lineJoin: 'round'
+                }).addTo(map);
             }
         }
 
