@@ -495,7 +495,7 @@
             const sorted = [...destinations].sort((a,b) => a.order - b.order);
             sorted.forEach(d => {
                 const icon = L.divIcon({
-                    html: `<span>${d.icone || '📍'}</span>`,
+                    html: `<span>${d.icone || ''}</span>`,
                     className: 'custom-map-marker',
                     iconSize: [50, 50],
                     iconAnchor: [25, 25]
@@ -541,7 +541,7 @@
                     cityBudget += (a.price || 0);
                     return `
                     <div class="item-row">
-                        <div class="item-main"><span>📍 ${a.name}</span></div>
+                        <div class="item-main"><span> ${a.name}</span></div>
                         <div style="display:flex; align-items:center;">
                             ${a.price ? `<span class="price-badge">${a.price}€</span>` : ''}
                             <button class="remove-item" onclick="removeItem('${d.id}', 'activities', ${idx})">×</button>
