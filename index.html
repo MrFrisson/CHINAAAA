@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHINAAAA - Itinéraire</title>
+    <title>CHINAAAA - Itinéraire Final</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@400;500;600&display=swap" rel="stylesheet">
@@ -47,12 +47,27 @@
 
         /* --- MAP SECTION --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 2; }
-        .map-wrapper { background: var(--bg-card); padding: 1rem; margin: -60px 0 4rem; border-radius: 2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.6); border: 1px solid rgba(184, 148, 100, 0.15); position: relative; }
+        .map-wrapper { background: var(--bg-card); padding: 1rem; margin: -60px 0 2rem; border-radius: 2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.6); border: 1px solid rgba(184, 148, 100, 0.15); position: relative; }
         #map { width: 100%; height: 600px; border-radius: 1.5rem; background: #111; z-index: 5; }
         .custom-map-marker { display: flex !important; align-items: center; justify-content: center; background: rgba(15, 17, 21, 0.9) !important; backdrop-filter: blur(4px); border: 2px solid var(--gold) !important; border-radius: 50% !important; box-shadow: 0 0 15px rgba(184, 148, 100, 0.4); width: 50px !important; height: 50px !important; }
         .custom-map-marker span { font-size: 24px; color: white; }
         .legende { position: absolute; bottom: 25px; left: 25px; background: rgba(15, 17, 21, 0.9); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(184, 148, 100, 0.3); display: flex; gap: 15px; font-size: 0.75rem; color: var(--gold-light); z-index: 1000; flex-wrap: wrap; }
 
+        /* --- CURRENCY CONVERTER --- */
+        .converter-section { background: var(--bg-card); padding: 2rem; border-radius: 2rem; border: 1px solid rgba(184, 148, 100, 0.15); margin-bottom: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .converter-section h3 { color: var(--gold); font-size: 1.5rem; margin-bottom: 1.5rem; letter-spacing: 2px; text-transform: uppercase; text-align: center; }
+        .converter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 900px; margin: 0 auto; }
+        .currency-input-group { display: flex; flex-direction: column; gap: 10px; }
+        .currency-input-group label { color: var(--red-imperial); font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; }
+        .currency-input-group input { background: rgba(0,0,0,0.3); border: 1px solid rgba(184, 148, 100, 0.3); color: var(--gold); padding: 15px; border-radius: 12px; font-size: 1.2rem; font-weight: 700; text-align: center; transition: 0.3s; }
+        .currency-input-group input:focus { border-color: var(--gold); outline: none; background: rgba(184, 148, 100, 0.1); }
+        .rate-info { text-align: center; margin-top: 1.5rem; font-size: 0.7rem; color: var(--text-muted); font-style: italic; }
+
+        /* --- GENERAL LINKS SECTION --- */
+        .general-links-section { background: var(--bg-card); padding: 2rem; border-radius: 2rem; border: 1px solid rgba(184, 148, 100, 0.15); margin-bottom: 4rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .general-links-section h3 { color: var(--gold); font-size: 1.8rem; margin-bottom: 1.5rem; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid rgba(184, 148, 100, 0.1); padding-bottom: 10px; }
+        .general-links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        
         /* --- CALENDAR MODAL --- */
         #calendarModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.96); z-index: 2000; backdrop-filter: blur(15px); align-items: center; justify-content: center; padding: 20px; }
         .calendar-container { width: 100%; max-width: 1100px; background: #121212; border-radius: 1.5rem; border: 1px solid var(--gold); padding: 2rem; box-shadow: 0 50px 100px rgba(0,0,0,0.8); position: relative; max-height: 90vh; overflow-y: auto; }
@@ -139,6 +154,38 @@
     <section class="hero"><div class="hero-content"><h2>CHINAAAA</h2></div></section>
     <div class="container">
         <div class="map-wrapper"><div id="map"></div><div class="legende" id="mapLegende"></div></div>
+        
+        <!-- CONVERTISSEUR DE DEVISES -->
+        <div class="converter-section">
+            <h3>Convertisseur de Devises</h3>
+            <div class="converter-grid">
+                <div class="currency-input-group">
+                    <label>YUAN CHINOIS (CNY)</label>
+                    <input type="number" id="cny-val" placeholder="0.00" step="0.01">
+                </div>
+                <div class="currency-input-group">
+                    <label>EURO (EUR)</label>
+                    <input type="number" id="eur-val" placeholder="0.00" step="0.01">
+                </div>
+                <div class="currency-input-group">
+                    <label>DOLLAR AUS (AUD)</label>
+                    <input type="number" id="aud-val" placeholder="0.00" step="0.01">
+                </div>
+            </div>
+            <div class="rate-info" id="rate-display">Chargement des taux en temps réel...</div>
+        </div>
+
+        <!-- LIENS GÉNÉRAUX -->
+        <div class="general-links-section">
+            <h3>Ressources & Liens Utiles</h3>
+            <div class="general-links-grid" id="generalLinksContainer"></div>
+            <div class="add-group" style="max-width: 600px; margin: 0 auto;">
+                <input type="url" placeholder="Lien (Hôtel, Train, etc.)..." id="gen-lnk-u">
+                <input type="number" placeholder="€" id="gen-lnk-p">
+                <button onclick="addGeneralLink()">+</button>
+            </div>
+        </div>
+
         <div class="destinations" id="destContainer"></div>
         <div class="add-step-container"><button class="add-step-btn" onclick="addStep()">+ AJOUTER UNE ÉTAPE</button></div>
     </div>
@@ -171,9 +218,52 @@
         };
 
         let destinations = [];
+        let generalLinks = [];
         let map = null;
         let mapLayers = L.layerGroup();
         let startDate = 1;
+        let rates = { CNY: 7.8, AUD: 1.6 }; // Valeurs par défaut
+
+        // --- CONVERTISSEUR LOGIQUE ---
+        const cnyInput = document.getElementById('cny-val');
+        const eurInput = document.getElementById('eur-val');
+        const audInput = document.getElementById('aud-val');
+
+        async function fetchRates() {
+            try {
+                const res = await fetch('https://open.er-api.com/v6/latest/EUR');
+                const data = await res.json();
+                rates.CNY = data.rates.CNY;
+                rates.AUD = data.rates.AUD;
+                document.getElementById('rate-display').textContent = `Taux actuels : 1€ = ${rates.CNY.toFixed(2)} CNY | 1€ = ${rates.AUD.toFixed(2)} AUD`;
+            } catch (e) {
+                document.getElementById('rate-display').textContent = "Erreur de chargement des taux. Utilisation des taux estimés.";
+            }
+        }
+
+        cnyInput.oninput = () => {
+            const val = parseFloat(cnyInput.value);
+            if (!isNaN(val)) {
+                eurInput.value = (val / rates.CNY).toFixed(2);
+                audInput.value = (parseFloat(eurInput.value) * rates.AUD).toFixed(2);
+            } else { eurInput.value = ''; audInput.value = ''; }
+        };
+
+        eurInput.oninput = () => {
+            const val = parseFloat(eurInput.value);
+            if (!isNaN(val)) {
+                cnyInput.value = (val * rates.CNY).toFixed(2);
+                audInput.value = (val * rates.AUD).toFixed(2);
+            } else { cnyInput.value = ''; audInput.value = ''; }
+        };
+
+        audInput.oninput = () => {
+            const val = parseFloat(audInput.value);
+            if (!isNaN(val)) {
+                eurInput.value = (val / rates.AUD).toFixed(2);
+                cnyInput.value = (parseFloat(eurInput.value) * rates.CNY).toFixed(2);
+            } else { eurInput.value = ''; cnyInput.value = ''; }
+        };
 
         // Lanterns
         const lContainer = document.getElementById('lanterns');
@@ -216,6 +306,7 @@
         }
 
         function load() {
+            fetchRates();
             // Charger la date de départ
             onValue(ref(db, 'settings/startDate'), (snap) => {
                 startDate = snap.exists() ? parseInt(snap.val()) : 1;
@@ -223,6 +314,12 @@
                 if(document.getElementById('calendarModal').style.display === 'flex') renderCalendar();
             });
             
+            // Charger les liens généraux
+            onValue(ref(db, 'generalLinks'), (snap) => {
+                generalLinks = snap.exists() ? Object.values(snap.val()) : [];
+                renderGeneralLinks();
+            });
+
             // Charger les destinations
             onValue(ref(db, 'destinations'), (snap) => {
                 if(snap.exists()) {
@@ -236,6 +333,23 @@
                 }
                 render(); initMap(); updateMap();
                 if(document.getElementById('calendarModal').style.display === 'flex') renderCalendar();
+            });
+        }
+
+        function renderGeneralLinks() {
+            const cont = document.getElementById('generalLinksContainer');
+            cont.innerHTML = '';
+            generalLinks.forEach((l, idx) => {
+                let domain = 'Lien'; try { domain = new URL(l.url).hostname.replace('www.', ''); } catch(e) {}
+                const row = document.createElement('div');
+                row.className = 'item-row';
+                row.innerHTML = `
+                    <div class="item-main"><a href="${l.url}" target="_blank">${domain}</a></div>
+                    <div style="display:flex; align-items:center;">
+                        ${l.price ? `<span class="price-badge">${l.price}€</span>` : ''}
+                        <button class="remove-item" onclick="removeGeneralLink(${idx})">×</button>
+                    </div>`;
+                cont.appendChild(row);
             });
         }
 
@@ -277,7 +391,7 @@
         const modal = document.getElementById('calendarModal');
         document.getElementById('openCalendar').onclick = () => { 
             modal.style.display = 'flex';
-            setTimeout(renderCalendar, 10); // Petit délai pour laisser le temps au CSS d'afficher le modal
+            setTimeout(renderCalendar, 10);
         };
         document.getElementById('closeCalendar').onclick = () => modal.style.display = 'none';
         
@@ -299,7 +413,6 @@
             const heads = grid.querySelectorAll('.calendar-day-head');
             grid.innerHTML = ''; heads.forEach(h => grid.appendChild(h));
             
-            // Décembre 2026 commence un Mardi (Index 1 si Lun=0)
             const offset = 1; 
             for(let i=0; i<offset; i++) grid.appendChild(document.createElement('div')).className = 'calendar-cell';
             
@@ -327,7 +440,6 @@
                         bar.style.backgroundColor = color; 
                         bar.style.opacity = '0.9';
                         
-                        // TEXTE SANS EMOJI
                         if(segStart === start) bar.innerHTML = `${dest.city}`;
                         
                         const sCell = document.getElementById(`day-${segStart}`);
@@ -338,7 +450,6 @@
                             const eRect = eCell.getBoundingClientRect(); 
                             const gRect = grid.getBoundingClientRect();
                             
-                            // On vérifie que les dimensions sont calculables
                             if (gRect.width > 0) {
                                 bar.style.top = (sRect.top - gRect.top + 40) + 'px';
                                 bar.style.left = (sRect.left - gRect.left + 5) + 'px';
@@ -386,6 +497,23 @@
             const d = destinations.find(x => x.id === id);
             const list = [...d[type]]; list.splice(idx, 1);
             set(ref(db, `destinations/${id}/${type}`), list);
+        };
+
+        // LIENS GÉNÉRAUX
+        window.addGeneralLink = () => {
+            const u = document.getElementById('gen-lnk-u');
+            const p = document.getElementById('gen-lnk-p');
+            if(!u.value.trim()) return;
+            const list = [...generalLinks];
+            list.push({ url: u.value.trim(), price: parseFloat(p.value)||0 });
+            set(ref(db, 'generalLinks'), list);
+            u.value = ''; p.value = '';
+        };
+
+        window.removeGeneralLink = (idx) => {
+            const list = [...generalLinks];
+            list.splice(idx, 1);
+            set(ref(db, 'generalLinks'), list);
         };
         
         load();
